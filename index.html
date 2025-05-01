@@ -39,7 +39,6 @@
       border: 1px solid #ccc;
     }
 
-    /* 動畫定義 */
     @keyframes shake {
       0% { transform: rotate(0); }
       20% { transform: rotate(5deg); }
@@ -78,6 +77,9 @@
     <iframe src="https://drive.google.com/file/d/1SkNqCSGtRGRH1ON6yZHJ8Z-Rs9h_i1y6/preview" allow="autoplay"></iframe>
   </div>
 
+  <!-- 🎊 confetti CDN 引入 -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
   <script>
     const gift = document.getElementById('gift');
     const message = document.getElementById('message');
@@ -86,6 +88,13 @@
     function openGift() {
       // 套用搖動動畫
       gift.classList.add('animate-shake');
+
+      // 彩帶飛出動畫
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
 
       // 等搖動結束後執行升起動畫 + 顯示內容
       setTimeout(() => {
