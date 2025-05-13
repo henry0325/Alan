@@ -1,7 +1,89 @@
-<div style="position: relative; width: 100%; height: 0; padding-top: 56.2225%;
- padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;
- border-radius: 8px; will-change: transform;">
-  <iframe loading="lazy" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;"
-    src="https://www.canva.com/design/DAGmL-oeqhg/c3mRGJGCLNva-9KLm-o2vQ/watch?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
-  </iframe>
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Gift From Alan</title>
+  <!-- 可選的外部樣式或框架 -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    .container {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background-color: #fff;
+    }
+
+    iframe {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      max-width: 1200px;
+      max-height: 675px;
+      border: none;
+      margin: 20px 0;
+    }
+
+    .button-container {
+      margin-top: 20px;
+    }
+
+    .play-button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .play-button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- 播放音效的按鈕 -->
+  <button class="play-button" onclick="playSound()">點擊播放音效</button>
+
+  <!-- 這裡是 Canva 網站的 URL -->
+  <div style="position: relative; width: 100%; height: 0; padding-top: 56.2225%; padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden; border-radius: 8px; will-change: transform;">
+    <iframe loading="lazy" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;"
+      src="https://a-gift-from-alan.my.canva.site/a-gift-from-alan" allowfullscreen="allowfullscreen" allow="fullscreen">
+    </iframe>
+  </div>
 </div>
+
+<!-- 音效播放器 -->
+<audio id="celebrate-sound" src="https://example.com/your-sound-file.mp3" preload="auto"></audio>
+
+<script>
+  // 音效播放功能
+  function playSound() {
+    var audio = document.getElementById('celebrate-sound');
+    audio.play();
+  }
+
+  // 頁面加載後自動播放音效（如果瀏覽器允許）
+  window.onload = function() {
+    var audio = document.getElementById('celebrate-sound');
+    audio.play().catch(function(e) {
+      console.log("自動播放音效失敗，等待使用者互動。");
+    });
+  };
+</script>
+
+</body>
+</html>
