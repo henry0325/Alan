@@ -123,33 +123,33 @@
     }
     
     .open-button {
-      background: linear-gradient(145deg, #ff5e62, #ff9966);
+      background: linear-gradient(145deg, #63BE7B, #FFEF9C);
       color: white;
       border: none;
-      padding: 24px 60px;
-      font-size: 34px;
+      padding: 12px 30px;
+      font-size: 24px;
       font-weight: bold;
-      border-radius: 100px;
+      border-radius: 50px;
       box-shadow: 0 5px 15px rgba(255, 94, 98, 0.4);
       cursor: pointer;
-      top: 0px;
       transform: translateY(0);
       transition: all 0.3s ease;
-      position: relative;
+      position: absolute;
       overflow: hidden;
       z-index: 3;
       letter-spacing: 2px;
-      display: block;
-      margin: 15px auto 0;
+      bottom: 5%;
+      left: 50%;
+      transform: translateX(-50%);
     }
     
     .open-button:hover {
-      transform: translateY(-3px);
+      transform: translateX(-50%) translateY(-3px);
       box-shadow: 0 8px 20px rgba(255, 94, 98, 0.6);
     }
     
     .open-button:active {
-      transform: translateY(1px);
+      transform: translateX(-50%) translateY(1px);
       box-shadow: 0 2px 10px rgba(255, 94, 98, 0.4);
     }
     
