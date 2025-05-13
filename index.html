@@ -13,7 +13,7 @@
 
     h1 {
       font-weight: bold;
-      font-size: 26px;
+      font-size: 34px;
     }
 
     .gift-container {
@@ -28,9 +28,9 @@
     .gift-top {
       width: 100%;
       position: absolute;
-      top: 0;
+      top: -5px;
       left: 0;
-      transform-origin: bottom center;
+      transform-origin: left center;
       transition: transform 0.5s ease;
       z-index: 2;
     }
@@ -43,7 +43,7 @@
 
     /* Hover 傾斜開啟效果 */
     .gift-container:hover .gift-top {
-      transform: rotateX(25deg);
+      transform: rotateZ(-10deg);
     }
 
     /* 點擊後開啟動畫 */
