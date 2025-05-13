@@ -60,17 +60,6 @@
       opacity: 0;
     }
 
-    .fade-out {
-      animation: fadeOut 1s ease forwards;
-    }
-
-    @keyframes fadeOut {
-      to {
-        opacity: 0;
-        transform: scale(0.95);
-      }
-    }
-
     #message, #pdf-viewer, #pdf-fallback {
       display: none;
       margin-top: 20px;
@@ -141,10 +130,6 @@
     giftBox.addEventListener('click', () => {
       giftTop.classList.add('lift-open');
       giftBottom.classList.add('lift-bottom');
-
-      setTimeout(() => {
-        giftBox.classList.add('fade-out');
-      }, 1500);
 
       setTimeout(() => {
         giftBox.style.display = 'none';
