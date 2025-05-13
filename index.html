@@ -28,17 +28,18 @@
     .gift-top {
       width: 100%;
       position: absolute;
-      top: -30px;
+      top: -35px;
       left: 0;
       transform-origin: left center;
-      transition: transform 0.5s ease;
+      transition: transform 0.5s ease, opacity 0.5s ease;
       z-index: 2;
     }
 
     .gift-bottom {
       width: 100%;
-      top: 30px;
+      top: 35px;
       position: relative;
+      transition: transform 0.6s ease, opacity 0.6s ease;
       z-index: 1;
     }
 
@@ -47,10 +48,16 @@
       transform: rotateZ(-10deg);
     }
 
-    /* 點擊後開啟動畫 */
+    /* 點擊後上蓋向上飛並旋轉 */
     .lift-open {
       transform: translateY(-160px) rotate(-25deg);
-      transition: transform 0.8s ease;
+      opacity: 0;
+    }
+
+    /* 點擊後下蓋往下沉並淡出 */
+    .lift-bottom {
+      transform: translateY(80px);
+      opacity: 0;
     }
 
     #message, #pdf-viewer {
@@ -81,7 +88,7 @@
   <h1>🎁 A Gift from Alan 🎁</h1>
   <div class="gift-container" id="gift-box">
     <img class="gift-top" src="images/box-top.png" alt="gift top" id="giftTop">
-    <img class="gift-bottom" src="images/box-bottom.png" alt="gift bottom">
+    <img class="gift-bottom" src="images/box-bottom.png" alt="gift bottom" id="giftBottom">
   </div>
 
   <div id="message">A Concerto of Two Grandfathers</div>
@@ -91,12 +98,14 @@
   <script>
     const giftBox = document.getElementById('gift-box');
     const giftTop = document.getElementById('giftTop');
+    const giftBottom = document.getElementById('giftBottom');
     const message = document.getElementById('message');
     const pdfViewer = document.getElementById('pdf-viewer');
     const sound = document.getElementById('celebration-sound');
 
     giftBox.addEventListener('click', () => {
       giftTop.classList.add('lift-open');
+      giftBottom.classList.add('lift-bottom');
 
       setTimeout(() => {
         giftBox.style.display = 'none';
@@ -109,7 +118,7 @@
           spread: 120,
           origin: { y: 0.6 }
         });
-      }, 1000);
+      }, 900);
     });
   </script>
 
