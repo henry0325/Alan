@@ -48,14 +48,16 @@
       transform: rotateX(25deg) rotateZ(-10deg);
     }
 
+    /* 點擊後上蓋向上飛並旋轉 */
     .lift-open {
-      transform: translateY(-160px) rotateX(60deg) rotateZ(-25deg);
-      transition: transform 0.8s ease;
+      transform: translateY(-160px) rotate(-25deg);
+      opacity: 0;
     }
 
-    .open-bottom {
-      transform: translateY(30px) scale(1.1);
-      transition: transform 0.8s ease;
+    /* 點擊後下蓋往下沉並淡出 */
+    .lift-bottom {
+      transform: translateY(80px);
+      opacity: 0;
     }
 
     .fade-out {
@@ -90,7 +92,6 @@
     }
 
     iframe {
-      width: 100%;
       height: 50vh;
       border: 1px solid #ccc;
       border-radius: 8px;
@@ -138,7 +139,7 @@
 
     giftBox.addEventListener('click', () => {
       giftTop.classList.add('lift-open');
-      giftBottom.classList.add('open-bottom');
+      giftBottom.classList.add('lift-bottom');
 
       setTimeout(() => {
         giftBox.classList.add('fade-out');
