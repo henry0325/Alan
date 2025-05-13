@@ -14,11 +14,18 @@
     h1 {
       font-weight: bold;
       font-size: 50px;
+      margin-bottom: 10px;
+    }
+
+    #sub-title {
+      font-weight: bold;
+      font-size: 34px;
+      margin-top: 0;
     }
 
     .gift-container {
       position: relative;
-      width: 100vw;
+      width: 80vw;
       max-width: 400px;
       margin: 0 auto;
       perspective: 1000px;
@@ -28,51 +35,44 @@
     .gift-top {
       width: 100%;
       position: absolute;
-      top: -35px;
+      top: -30px;
       left: 0;
       transform-origin: left center;
-      transition: transform 0.5s ease, opacity 0.5s ease;
+      transition: transform 0.5s ease;
       z-index: 2;
     }
 
     .gift-bottom {
       width: 100%;
-      top: 35px;
+      top: 30px;
       position: relative;
-      transition: transform 0.6s ease, opacity 0.6s ease;
       z-index: 1;
     }
 
-    /* Hover 傾斜開啟效果 */
     .gift-container:hover .gift-top {
-      transform: rotateZ(-10deg);
+      transform: rotateX(25deg) rotateZ(-10deg);
     }
 
-    /* 點擊後上蓋向上飛並旋轉 */
     .lift-open {
-      transform: translateY(-160px) rotate(-25deg);
-      opacity: 0;
+      transform: translateY(-160px) rotateX(60deg) rotateZ(-25deg);
+      transition: transform 0.8s ease;
     }
 
-    /* 點擊後下蓋往下沉並淡出 */
-    .lift-bottom {
-      transform: translateY(80px);
-      opacity: 0;
-    }
-
-    #message, #pdf-viewer {
+    #message, #pdf-viewer, #pdf-fallback {
       display: none;
       margin-top: 20px;
     }
 
     #message {
-      font-size: 34px;
+      font-size: 24px;
     }
 
     iframe {
       width: 100%;
-      border: 1px solid #ccc;
       height: 65vh;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
     @media(min-width: 768px) {
@@ -81,36 +81,50 @@
       }
     }
   </style>
+
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
 
   <h1>🎁 A Gift from Alan 🎁</h1>
+  <p id="sub-title">點擊禮物盒開啟驚喜</p>
+
   <div class="gift-container" id="gift-box">
     <img class="gift-top" src="images/box-top.png" alt="gift top" id="giftTop">
-    <img class="gift-bottom" src="images/box-bottom.png" alt="gift bottom" id="giftBottom">
+    <img class="gift-bottom" src="images/box-bottom.png" alt="gift bottom">
   </div>
 
   <div id="message">A Concerto of Two Grandfathers</div>
-  <iframe id="pdf-viewer" src="images/your-document.pdf"></iframe>
+
+  <iframe id="pdf-viewer"
+    src="https://drive.google.com/file/d/1cJY_VDMF0JmhvzM-bC-bmnU1cfc41FVY/preview"
+    allow="autoplay"
+    allowfullscreen
+    frameborder="0">
+  </iframe>
+
+  <div id="pdf-fallback">
+    若無法開啟，<a href="https://drive.google.com/file/d/1cJY_VDMF0JmhvzM-bC-bmnU1cfc41FVY/view?usp=drive_link" target="_blank">請點此下載 PDF</a>
+  </div>
+
   <audio id="celebration-sound" src="images/celebration.mp3" preload="auto"></audio>
 
   <script>
     const giftBox = document.getElementById('gift-box');
     const giftTop = document.getElementById('giftTop');
-    const giftBottom = document.getElementById('giftBottom');
     const message = document.getElementById('message');
     const pdfViewer = document.getElementById('pdf-viewer');
+    const pdfFallback = document.getElementById('pdf-fallback');
     const sound = document.getElementById('celebration-sound');
 
     giftBox.addEventListener('click', () => {
       giftTop.classList.add('lift-open');
-      giftBottom.classList.add('lift-bottom');
 
       setTimeout(() => {
         giftBox.style.display = 'none';
         message.style.display = 'block';
         pdfViewer.style.display = 'block';
+        pdfFallback.style.display = 'block';
         sound.play();
 
         confetti({
@@ -118,7 +132,7 @@
           spread: 120,
           origin: { y: 0.6 }
         });
-      }, 900);
+      }, 1000);
     });
   </script>
 
