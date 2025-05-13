@@ -6,11 +6,13 @@
   <title>A Gift from Alan</title>
   <style>
     body {
-      background-color: #f0f8ff;
+      background: linear-gradient(135deg, #e0f7fa 0%, #bbdefb 50%, #c5cae9 100%);
       font-family: Arial, sans-serif;
       text-align: center;
       padding: 0;
       overflow-x: hidden;
+      min-height: 100vh;
+      margin: 0;
     }
     h1 {
       font-weight: bold;
@@ -31,7 +33,7 @@
       top: -35px;
       left: 0;
       transform-origin: left center;
-      transition: transform 0.5s ease;
+      transition: transform 0.5s ease, opacity 0.5s ease;
       z-index: 2;
     }
     .gift-bottom {
@@ -39,17 +41,18 @@
       top: 35px;
       position: relative;
       z-index: 1;
+      transition: transform 0.5s ease, opacity 0.5s ease;
     }
     .gift-container:hover .gift-top {
       transform: rotateX(25deg) rotateZ(-10deg);
     }
     /* 點擊後上蓋向上飛並旋轉 */
-    .lift-open {
-      transform: translateY(-160px) rotate(-25deg);
+    .gift-top.lift-open {
+      transform: translateY(-160px) rotate(-25deg) !important;
       opacity: 0;
     }
     /* 點擊後下蓋往下沉並淡出 */
-    .lift-bottom {
+    .gift-bottom.lift-bottom {
       transform: translateY(80px);
       opacity: 0;
     }
