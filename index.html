@@ -53,6 +53,11 @@
       transition: transform 0.8s ease;
     }
 
+    .open-bottom {
+      transform: translateY(30px) scale(1.1);
+      transition: transform 0.8s ease;
+    }
+
     #message, #pdf-viewer, #pdf-fallback {
       display: none;
       margin-top: 20px;
@@ -114,21 +119,23 @@
 
     giftBox.addEventListener('click', () => {
       giftTop.classList.add('lift-open');
+      document.querySelector('.gift-bottom').classList.add('open-bottom');
 
-      setTimeout(() => {
-        giftBox.style.display = 'none';
-        message.style.display = 'block';
-        pdfViewer.style.display = 'block';
-        pdfFallback.style.display = 'block';
-        sound.play();
+  setTimeout(() => {
+    giftBox.style.display = 'none';
+    message.style.display = 'block';
+    pdfViewer.style.display = 'block';
+    pdfFallback.style.display = 'block';
+    sound.play();
 
-        confetti({
-          particleCount: 150,
-          spread: 120,
-          origin: { y: 0.6 }
-        });
-      }, 1000);
+    confetti({
+      particleCount: 150,
+      spread: 120,
+      origin: { y: 0.6 }
     });
+  }, 1300);
+});
+
   </script>
 
 </body>
