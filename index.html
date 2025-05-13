@@ -1,126 +1,118 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>A Gift from Alan</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
       background-color: #f0f8ff;
-      text-align: center;
       font-family: Arial, sans-serif;
+      text-align: center;
       padding: 20px;
     }
-
     h1 {
-      font-size: 28px;
       font-weight: bold;
+      font-size: 26px;
     }
 
-    #gift-box {
-      width: 80vw;
-      max-width: 400px;
+    .gift-container {
+      position: relative;
+      width: 200px;
+      max-width: 80%;
+      margin: 0 auto;
       cursor: pointer;
-      transition: transform 0.3s ease;
     }
 
-    #gift-box:hover {
-      transform: scale(1.05);
+    .gift-top, .gift-bottom {
+      width: 100%;
+      transition: transform 0.4s ease;
+      position: absolute;
+      left: 0;
+    }
+
+    .gift-top {
+      top: 0;
+      z-index: 2;
+    }
+
+    .gift-bottom {
+      bottom: 0;
+      z-index: 1;
+      position: relative;
+    }
+
+    /* Hover 微開效果 */
+    .gift-container:hover .gift-top {
+      transform: translateY(-10px);
+    }
+
+    /* 開啟動畫 */
+    .lift-open {
+      transform: translateY(-150px) rotate(-10deg);
+      transition: transform 0.8s ease;
+    }
+
+    #message, #pdf-viewer {
+      display: none;
+      margin-top: 20px;
     }
 
     #message {
-      display: none;
       font-size: 24px;
-      margin-top: 20px;
-      color: #333;
-      font-weight: bold;
     }
 
-    #pdf-viewer {
-      display: none;
+    iframe {
       width: 100%;
       border: 1px solid #ccc;
+      height: 65vh;
     }
 
-    @media (min-width: 768px) {
-      #pdf-viewer {
+    @media(min-width: 768px) {
+      iframe {
         height: 80vh;
       }
     }
-
-    @media (max-width: 767px) {
-      #pdf-viewer {
-        height: 65vh;
-      }
-    }
-
-    /* 動畫定義 */
-    @keyframes shake {
-      0% { transform: rotate(0); }
-      20% { transform: rotate(5deg); }
-      40% { transform: rotate(-5deg); }
-      60% { transform: rotate(4deg); }
-      80% { transform: rotate(-4deg); }
-      100% { transform: rotate(0); }
-    }
-
-    @keyframes liftUp {
-      0% { transform: translateY(0); opacity: 1; }
-      100% { transform: translateY(-200px); opacity: 0; }
-    }
-
-    .animate-shake {
-      animation: shake 0.5s ease;
-    }
-
-    .animate-lift {
-      animation: liftUp 0.8s ease forwards;
-    }
   </style>
-
-  <!-- Confetti JS -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
 
   <h1>🎁 A Gift from Alan 🎁</h1>
-  <img id="gift-box" src="images/gift-box.png" alt="禮物盒">
+  <div class="gift-container" id="gift-box">
+    <img class="gift-top" src="images/gift-box-top.png" alt="gift top" id="giftTop">
+    <img class="gift-bottom" src="images/gift-box-bottom.png" alt="gift bottom">
+  </div>
+
   <div id="message">A Concerto of Two Grandfathers</div>
-  <iframe id="pdf-viewer" src="images/your-document.pdf" allow="autoplay"></iframe>
+  <iframe id="pdf-viewer" src="images/your-document.pdf"></iframe>
   <audio id="celebration-sound" src="images/celebration.mp3" preload="auto"></audio>
 
   <script>
     const giftBox = document.getElementById('gift-box');
+    const giftTop = document.getElementById('giftTop');
     const message = document.getElementById('message');
     const pdfViewer = document.getElementById('pdf-viewer');
-    const celebrationSound = document.getElementById('celebration-sound');
+    const sound = document.getElementById('celebration-sound');
 
     giftBox.addEventListener('click', () => {
-      // 播放音效
-      celebrationSound.play();
+      // 禮物上蓋打開動畫
+      giftTop.classList.add('lift-open');
 
-      // 動畫效果
-      giftBox.classList.add('animate-shake');
-      setTimeout(() => {
-        giftBox.classList.remove('animate-shake');
-        giftBox.classList.add('animate-lift');
-      }, 500);
-
-      // 顯示內容
+      // 延遲顯示內容
       setTimeout(() => {
         giftBox.style.display = 'none';
         message.style.display = 'block';
         pdfViewer.style.display = 'block';
-      }, 1200);
+        sound.play();
 
-      // 彩帶動畫
-      confetti({
-        particleCount: 150,
-        spread: 100,
-        origin: { y: 0.6 }
-      });
+        // 雪花特效
+        confetti({
+          particleCount: 150,
+          spread: 120,
+          origin: { y: 0.6 }
+        });
+      }, 1000);
     });
   </script>
-
 </body>
 </html>
