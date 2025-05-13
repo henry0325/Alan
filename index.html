@@ -2,46 +2,91 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <title>開啟禮物</title>
+  <title>A Gift from Alan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
       background-color: #f0f8ff;
       text-align: center;
       font-family: Arial, sans-serif;
-      padding: 40px;
+      padding: 20px;
     }
+
+    h1 {
+      font-size: 28px;
+      font-weight: bold;
+    }
+
     #gift-box {
-      width: 200px;
+      width: 80vw;
+      max-width: 400px;
       cursor: pointer;
       transition: transform 0.3s ease;
     }
+
     #gift-box:hover {
-      transform: scale(1.1);
+      transform: scale(1.05);
     }
+
     #message {
       display: none;
       font-size: 24px;
       margin-top: 20px;
       color: #333;
+      font-weight: bold;
     }
+
     #pdf-viewer {
       display: none;
-      width: 80%;
-      height: 600px;
-      margin-top: 20px;
-      border: 2px solid #ccc;
-      border-radius: 10px;
+      width: 100%;
+      border: 1px solid #ccc;
+    }
+
+    @media (min-width: 768px) {
+      #pdf-viewer {
+        height: 80vh;
+      }
+    }
+
+    @media (max-width: 767px) {
+      #pdf-viewer {
+        height: 65vh;
+      }
+    }
+
+    /* 動畫定義 */
+    @keyframes shake {
+      0% { transform: rotate(0); }
+      20% { transform: rotate(5deg); }
+      40% { transform: rotate(-5deg); }
+      60% { transform: rotate(4deg); }
+      80% { transform: rotate(-4deg); }
+      100% { transform: rotate(0); }
+    }
+
+    @keyframes liftUp {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-200px); opacity: 0; }
+    }
+
+    .animate-shake {
+      animation: shake 0.5s ease;
+    }
+
+    .animate-lift {
+      animation: liftUp 0.8s ease forwards;
     }
   </style>
+
   <!-- Confetti JS -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
 
-  <h1>🎁 點擊開啟您的禮物 🎁</h1>
+  <h1>🎁 A Gift from Alan 🎁</h1>
   <img id="gift-box" src="images/gift-box.png" alt="禮物盒">
-  <div id="message">驚喜！請查看下方的內容。</div>
-  <iframe id="pdf-viewer" src="images/your-document.pdf"></iframe>
+  <div id="message">A Concerto of Two Grandfathers</div>
+  <iframe id="pdf-viewer" src="images/your-document.pdf" allow="autoplay"></iframe>
   <audio id="celebration-sound" src="images/celebration.mp3" preload="auto"></audio>
 
   <script>
@@ -54,14 +99,21 @@
       // 播放音效
       celebrationSound.play();
 
-      // 顯示訊息與 PDF
-      message.style.display = 'block';
-      pdfViewer.style.display = 'block';
+      // 動畫效果
+      giftBox.classList.add('animate-shake');
+      setTimeout(() => {
+        giftBox.classList.remove('animate-shake');
+        giftBox.classList.add('animate-lift');
+      }, 500);
 
-      // 隱藏禮物盒
-      giftBox.style.display = 'none';
+      // 顯示內容
+      setTimeout(() => {
+        giftBox.style.display = 'none';
+        message.style.display = 'block';
+        pdfViewer.style.display = 'block';
+      }, 1200);
 
-      // 觸發彩帶動畫
+      // 彩帶動畫
       confetti({
         particleCount: 150,
         spread: 100,
