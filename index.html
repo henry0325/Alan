@@ -82,27 +82,63 @@
     #message {
       font-size: 28px;
     }
+    #pdf-render-container {
+      position: relative;
+      width: 100%;
+      max-width: 90%;
+      margin: 0 auto;
+    }
     canvas {
       width: 100% !important;
       height: auto !important;
-      max-width: 90%;
       border: 1px solid #ccc;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
       margin-top: 16px;
+      opacity: 0;
+      transition: opacity 0.5s ease-in;
     }
-    #pdf-controls {
-      margin: 10px auto;
+    canvas.fade-in {
+      opacity: 1;
     }
-    #pdf-controls button {
-      padding: 8px 16px;
-      font-size: 16px;
-      margin: 0 8px;
-      border: none;
-      border-radius: 6px;
-      background-color: #4CAF50;
+    .nav-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(76, 175, 80, 0.7);
       color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s;
+      z-index: 10;
+    }
+    .nav-button:hover {
+      background-color: rgba(76, 175, 80, 1);
+      transform: translateY(-50%) scale(1.1);
+    }
+    .nav-button:active {
+      transform: translateY(-50%) scale(0.95);
+    }
+    #prev-page {
+      left: 10px;
+    }
+    #next-page {
+      right: 10px;
+    }
+    .page-info {
+      margin: 10px auto;
+      font-size: 16px;
+      background-color: rgba(255, 255, 255, 0.7);
+      padding: 5px 15px;
+      border-radius: 20px;
+      display: inline-block;
     }
     #pdf-fallback {
       margin: 20px auto;
@@ -144,9 +180,25 @@
       50% { transform: scale(1.05); }
       100% { transform: scale(1); }
     }
+    /* For mobile */
+    @media (max-width: 768px) {
+      .nav-button {
+        width: 40px;
+        height: 40px;
+        font-size: 16px; 
+      }
+      h1 {
+        font-size: 28px;
+      }
+      .open-button {
+        font-size: 28px;
+        padding: 10px 24px;
+      }
+    }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
 </head>
 <body>
   <h1 class="header">🎁 A Gift from Alan 🎁</h1>
@@ -159,11 +211,13 @@
     <div id="message">A Concerto of Two Grandfathers</div>
 
     <div id="pdf-container">
-      <canvas id="pdf-canvas"></canvas>
-      <div id="pdf-controls">
-        <button id="prev-page">Previous</button>
-        <span>Page <span id="page-num">1</span> / <span id="page-count">?</span></span>
-        <button id="next-page">Next</button>
+      <div id="pdf-render-container">
+        <canvas id="pdf-canvas"></canvas>
+        <button id="prev-page" class="nav-button" aria-label="Previous page">❮</button>
+        <button id="next-page" class="nav-button" aria-label="Next page">❯</button>
+      </div>
+      <div class="page-info">
+        Page <span id="page-num">1</span> / <span id="page-count">?</span>
       </div>
     </div>
 
@@ -188,6 +242,7 @@
     const sound = document.getElementById('celebration-sound');
 
     const canvas = document.getElementById('pdf-canvas');
+    const renderContainer = document.getElementById('pdf-render-container');
     const ctx = canvas.getContext('2d');
     const prevBtn = document.getElementById('prev-page');
     const nextBtn = document.getElementById('next-page');
@@ -203,6 +258,10 @@
 
     function renderPage(num) {
       pageRendering = true;
+      
+      // Remove fade-in class to start fade effect
+      canvas.classList.remove('fade-in');
+      
       pdfDoc.getPage(num).then(function(page) {
         const viewport = page.getViewport({ scale });
         canvas.height = viewport.height;
@@ -210,14 +269,26 @@
 
         const renderContext = { canvasContext: ctx, viewport: viewport };
         const renderTask = page.render(renderContext);
+        
         renderTask.promise.then(() => {
           pageRendering = false;
+          
+          // Add fade-in class after rendering to trigger fade effect
+          setTimeout(() => {
+            canvas.classList.add('fade-in');
+          }, 50);
+          
           if (pageNumPending !== null) {
             renderPage(pageNumPending);
             pageNumPending = null;
           }
         });
+        
         pageNumSpan.textContent = num;
+        
+        // Update button states
+        prevBtn.style.visibility = num <= 1 ? 'hidden' : 'visible';
+        nextBtn.style.visibility = num >= pdfDoc.numPages ? 'hidden' : 'visible';
       });
     }
 
@@ -229,16 +300,30 @@
       }
     }
 
-    prevBtn.addEventListener('click', () => {
+    function goPrevPage() {
       if (pageNum <= 1) return;
       pageNum--;
       queueRenderPage(pageNum);
-    });
+    }
 
-    nextBtn.addEventListener('click', () => {
+    function goNextPage() {
       if (pageNum >= pdfDoc.numPages) return;
       pageNum++;
       queueRenderPage(pageNum);
+    }
+
+    prevBtn.addEventListener('click', goPrevPage);
+    nextBtn.addEventListener('click', goNextPage);
+
+    // Add keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (pdfContainer.classList.contains('show')) {
+        if (e.key === 'ArrowLeft') {
+          goPrevPage();
+        } else if (e.key === 'ArrowRight') {
+          goNextPage();
+        }
+      }
     });
 
     function openGift() {
@@ -267,9 +352,26 @@
         pdfDoc = pdf;
         pageCountSpan.textContent = pdf.numPages;
         renderPage(pageNum);
+        
+        // Initialize touch gestures after PDF is loaded
+        initTouchGestures();
       }).catch(err => {
         console.error('PDF loading error:', err);
         pdfFallback.style.display = 'block';
+      });
+    }
+
+    function initTouchGestures() {
+      // Initialize Hammer.js for touch gestures
+      const hammer = new Hammer(renderContainer);
+      
+      // Add swipe gestures
+      hammer.on('swipeleft', function() {
+        goNextPage();
+      });
+      
+      hammer.on('swiperight', function() {
+        goPrevPage();
       });
     }
 
