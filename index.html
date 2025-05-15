@@ -17,7 +17,7 @@
       flex-direction: column;
     }
     .header {
-      padding: 0px 0;
+      padding: 20px 0;
     }
     .main-content {
       flex: 1;
@@ -87,12 +87,65 @@
     #message {
       font-size: 28px;
     }
-    iframe {
+    #pdf-viewer {
       width: 100%;
-      height: 75vh;
-      border: 1px solid #ccc;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .pdf-container {
+      width: 100%;
+      position: relative;
+      margin: 0 auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
       border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+      background-color: #fff;
+    }
+    .pdf-page {
+      width: 100%;
+      height: auto;
+      display: none;
+    }
+    .pdf-page.active {
+      display: block;
+    }
+    .pdf-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 15px;
+      gap: 20px;
+    }
+    .nav-button {
+      background: linear-gradient(145deg, #4a90e2, #5a6acf);
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 8px rgba(90, 106, 207, 0.4);
+    }
+    .nav-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 12px rgba(90, 106, 207, 0.6);
+    }
+    .nav-button:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 6px rgba(90, 106, 207, 0.4);
+    }
+    .nav-button:disabled {
+      background: linear-gradient(145deg, #cccccc, #aaaaaa);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    .page-indicator {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
     }
     #pdf-fallback {
       margin: 20px auto;
@@ -123,11 +176,11 @@
     }
     
     .open-button {
-      background: linear-gradient(145deg, #63BE7B, #FFEF9C);
-      color: black;
+      background: linear-gradient(145deg, #ff5e62, #ff9966);
+      color: white;
       border: none;
       padding: 12px 30px;
-      font-size: 34px;
+      font-size: 24px;
       font-weight: bold;
       border-radius: 50px;
       box-shadow: 0 5px 15px rgba(255, 94, 98, 0.4);
@@ -138,7 +191,7 @@
       overflow: hidden;
       z-index: 3;
       letter-spacing: 2px;
-      bottom: 20%;
+      bottom: 5%;
       left: 50%;
       transform: translateX(-50%);
     }
@@ -190,15 +243,24 @@
       <button class="open-button" id="openButton">OPEN</button>
     </div>
     <div id="message">A Concerto of Two Grandfathers</div>
-    <iframe id="pdf-viewer"
-      src="https://drive.google.com/file/d/1cJY_VDMF0JmhvzM-bC-bmnU1cfc41FVY/preview"
-      allow="autoplay"
-      allowfullscreen
-      frameborder="0"
-      title="PDF">
-    </iframe>
+    <div id="pdf-viewer">
+      <div class="pdf-container" id="pdfContainer">
+        <!-- PDF pages will be loaded here dynamically -->
+        <img src="images/page1.jpg" class="pdf-page active" data-page="1" alt="Page 1">
+        <img src="images/page2.jpg" class="pdf-page" data-page="2" alt="Page 2">
+        <img src="images/page3.jpg" class="pdf-page" data-page="3" alt="Page 3">
+        <img src="images/page4.jpg" class="pdf-page" data-page="4" alt="Page 4">
+        <img src="images/page5.jpg" class="pdf-page" data-page="5" alt="Page 5">
+        <!-- Add more pages as needed -->
+      </div>
+      <div class="pdf-controls">
+        <button class="nav-button" id="prevButton" disabled>上一頁</button>
+        <span class="page-indicator" id="pageIndicator">1 / 5</span>
+        <button class="nav-button" id="nextButton">下一頁</button>
+      </div>
+    </div>
     <div id="pdf-fallback">
-      <p>V V V If you cannot review, please click download V V V</p>
+      <p>If you cannot review, please click download>></p>
       <a href="https://drive.google.com/file/d/1cJY_VDMF0JmhvzM-bC-bmnU1cfc41FVY/view" target="_blank">
         A Concerto of Two Grandfathers
       </a>
@@ -215,6 +277,62 @@
     const pdfFallback = document.getElementById('pdf-fallback');
     const sound = document.getElementById('celebration-sound');
     
+    // PDF navigation elements
+    const pdfContainer = document.getElementById('pdfContainer');
+    const prevButton = document.getElementById('prevButton');
+    const nextButton = document.getElementById('nextButton');
+    const pageIndicator = document.getElementById('pageIndicator');
+    const pdfPages = document.querySelectorAll('.pdf-page');
+    const totalPages = pdfPages.length;
+    let currentPage = 1;
+    
+    // PDF navigation functions
+    function updatePageDisplay() {
+      // Update page indicator
+      pageIndicator.textContent = `${currentPage} / ${totalPages}`;
+      
+      // Enable/disable navigation buttons
+      prevButton.disabled = currentPage === 1;
+      nextButton.disabled = currentPage === totalPages;
+      
+      // Show current page and hide others
+      pdfPages.forEach(page => {
+        const pageNum = parseInt(page.getAttribute('data-page'));
+        if (pageNum === currentPage) {
+          page.classList.add('active');
+        } else {
+          page.classList.remove('active');
+        }
+      });
+    }
+    
+    prevButton.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        updatePageDisplay();
+      }
+    });
+    
+    nextButton.addEventListener('click', () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        updatePageDisplay();
+      }
+    });
+    
+    // Add keyboard navigation for PDF
+    document.addEventListener('keydown', (event) => {
+      if (pdfViewer.classList.contains('show')) {
+        if (event.key === 'ArrowLeft' && currentPage > 1) {
+          currentPage--;
+          updatePageDisplay();
+        } else if (event.key === 'ArrowRight' && currentPage < totalPages) {
+          currentPage++;
+          updatePageDisplay();
+        }
+      }
+    });
+    
     // 點擊或按鍵操作打開禮物盒
     function openGift() {
       // 停止禮物盒的脈動動畫
@@ -229,6 +347,8 @@
         message.classList.add('show');
         pdfViewer.classList.add('show');
         pdfFallback.classList.add('show');
+        // Initialize PDF display
+        updatePageDisplay();
         try {
           sound.play().catch(err => console.log('audio error:', err));
           confetti({
@@ -257,24 +377,6 @@
         openGift();
       }
     });
-    
-    // 檢測 PDF 加載狀態
-    function checkPdfViewer() {
-      try {
-        // 嘗試檢測 iframe 內容是否加載成功
-        const iframeDoc = pdfViewer.contentDocument || pdfViewer.contentWindow.document;
-        // 如果無法訪問 iframe 內容（跨域問題），則顯示備用連結
-        if (!iframeDoc) {
-          pdfFallback.style.display = 'block';
-        }
-      } catch (e) {
-        // 如果有錯誤（通常是跨域錯誤），顯示備用連結
-        pdfFallback.style.display = 'block';
-      }
-    }
-    
-    // PDF iframe 加載完成後檢測
-    pdfViewer.addEventListener('load', checkPdfViewer);
   </script>
 </body>
 </html>
