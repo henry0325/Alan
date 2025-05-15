@@ -130,10 +130,10 @@
       margin: 10px auto;
     }
     .page-info {
-      margin: 10px auto;
-      font-size: 16px;
+      margin: 0 5px;
+      font-size: 18px;
       background-color: rgba(255, 255, 255, 0.7);
-      padding: 5px 15px;
+      padding: 5px 10px;
       border-radius: 20px;
       display: inline-block;
     }
@@ -141,15 +141,25 @@
       margin: 20px auto;
       max-width: 80%;
     }
+    #pdf-fallback p {
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+    #pdf-fallback .download-arrow {
+      font-size: 24px;
+      color: #4CAF50;
+      margin: 0 10px;
+    }
     #pdf-fallback a {
       display: inline-block;
-      padding: 10px 20px;
+      padding: 12px 25px;
       background-color: #4CAF50;
       color: white;
       text-decoration: none;
       border-radius: 5px;
-      font-size: 18px;
-      margin-top: 15px;
+      font-size: 22px;
+      margin-top: 10px;
+      font-weight: bold;
     }
     .open-button {
       background: linear-gradient(145deg, #63BE7B, #FFEF9C);
@@ -192,7 +202,17 @@
         padding: 10px 24px;
       }
       .page-info {
-        font-size: 14px;
+        font-size: 16px;
+      }
+      #pdf-fallback p {
+        font-size: 18px;
+      }
+      #pdf-fallback .download-arrow {
+        font-size: 22px;
+      }
+      #pdf-fallback a {
+        font-size: 20px;
+        padding: 10px 20px;
       }
     }
   </style>
@@ -216,15 +236,14 @@
       </div>
       <div class="page-controls">
         <button id="prev-page" class="nav-button" aria-label="Previous page">❮</button>
-        <div class="page-info">
-          Page <span id="page-num">1</span> / <span id="page-count">?</span>
-        </div>
+        <span class="page-info">Page <span id="page-num">1</span> / <span id="page-count">?</span></span>
         <button id="next-page" class="nav-button" aria-label="Next page">❯</button>
       </div>
     </div>
 
     <div id="pdf-fallback">
-      <p>V V If you cannot review, please click download V V</p>
+      <p>If you cannot review</p>
+      <p><span class="download-arrow">↓</span> please click download <span class="download-arrow">↓</span></p>
       <a href="pdfs/A Concerto of Two Grandfathers.pdf" target="_blank">
         A Concerto of Two Grandfathers
       </a>
