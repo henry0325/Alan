@@ -145,10 +145,27 @@
       font-size: 20px;
       margin-bottom: 5px;
     }
+    #pdf-fallback .download-line {
+      font-size: 32px;
+      margin: 15px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
     #pdf-fallback .download-arrow {
-      font-size: 24px;
+      font-size: 36px;
       color: #4CAF50;
-      margin: 0 10px;
+      margin: 0 15px;
+      display: inline-block;
+      animation: bounce 1.5s infinite ease-in-out;
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(10px); }
     }
     #pdf-fallback a {
       display: inline-block;
@@ -207,12 +224,23 @@
       #pdf-fallback p {
         font-size: 18px;
       }
+      #pdf-fallback .download-line {
+        font-size: 26px;
+      }
       #pdf-fallback .download-arrow {
-        font-size: 22px;
+        font-size: 32px;
+        width: 32px;
+        height: 32px;
+        line-height: 32px;
+        margin: 0 10px;
       }
       #pdf-fallback a {
         font-size: 20px;
         padding: 10px 20px;
+      }
+      @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(6px); }
       }
     }
   </style>
@@ -243,7 +271,11 @@
 
     <div id="pdf-fallback">
       <p>If you cannot review</p>
-      <p><span class="download-arrow">↓</span> please click download <span class="download-arrow">↓</span></p>
+      <div class="download-line">
+        <span class="download-arrow">⬇</span> 
+        please click download 
+        <span class="download-arrow">⬇</span>
+      </div>
       <a href="pdfs/A Concerto of Two Grandfathers.pdf" target="_blank">
         A Concerto of Two Grandfathers
       </a>
