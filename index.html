@@ -198,7 +198,7 @@
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+  <!-- Removed Hammer.js import since we're disabling swipe gestures -->
 </head>
 <body>
   <h1 class="header">🎁 A Gift from Alan 🎁</h1>
@@ -353,27 +353,14 @@
         pageCountSpan.textContent = pdf.numPages;
         renderPage(pageNum);
         
-        // Initialize touch gestures after PDF is loaded
-        initTouchGestures();
+        // Touch gesture initialization has been removed to allow normal mobile zooming
       }).catch(err => {
         console.error('PDF loading error:', err);
         pdfFallback.style.display = 'block';
       });
     }
 
-    function initTouchGestures() {
-      // Initialize Hammer.js for touch gestures
-      const hammer = new Hammer(renderContainer);
-      
-      // Add swipe gestures
-      hammer.on('swipeleft', function() {
-        goNextPage();
-      });
-      
-      hammer.on('swiperight', function() {
-        goPrevPage();
-      });
-    }
+    // Function initTouchGestures has been completely removed
 
     openButton.addEventListener('click', e => {
       e.stopPropagation();
