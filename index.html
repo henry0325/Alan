@@ -65,7 +65,7 @@
       transform: translateY(80px);
       opacity: 0;
     }
-    #message, #pdf-container, #pdf-fallback {
+    #message, #pdf-container {
       display: none;
       margin-top: 0;
       opacity: 0;
@@ -73,8 +73,7 @@
       transition: opacity 1s ease, transform 1s ease;
     }
     #message.show,
-    #pdf-container.show,
-    #pdf-fallback.show {
+    #pdf-container.show {
       display: block;
       opacity: 1;
       transform: translateY(0);
@@ -137,49 +136,6 @@
       border-radius: 20px;
       display: inline-block;
     }
-    #pdf-fallback {
-      margin: 20px auto;
-      max-width: 80%;
-    }
-    #pdf-fallback p.notice-line {
-      font-size: 28px;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-    #pdf-fallback .download-line {
-      font-size: 28px;
-      margin: 10px 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-    }
-    #pdf-fallback .download-arrow {
-      font-size: 36px;
-      color: #4CAF50;
-      margin: 0 15px;
-      display: inline-block;
-      animation: bounce 1.5s infinite ease-in-out;
-      width: 40px;
-      height: 40px;
-      line-height: 40px;
-      text-align: center;
-    }
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(10px); }
-    }
-    #pdf-fallback a {
-      display: inline-block;
-      padding: 12px 25px;
-      background-color: #4CAF50;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      font-size: 22px;
-      margin-top: 10px;
-      font-weight: bold;
-    }
     .open-button {
       background: linear-gradient(145deg, #63BE7B, #FFEF9C);
       color: black;
@@ -223,27 +179,6 @@
       .page-info {
         font-size: 16px;
       }
-      #pdf-fallback p.notice-line {
-        font-size: 22px;
-      }
-      #pdf-fallback .download-line {
-        font-size: 22px;
-      }
-      #pdf-fallback .download-arrow {
-        font-size: 32px;
-        width: 32px;
-        height: 32px;
-        line-height: 32px;
-        margin: 0 10px;
-      }
-      #pdf-fallback a {
-        font-size: 20px;
-        padding: 10px 20px;
-      }
-      @keyframes bounce {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(6px); }
-      }
     }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -270,21 +205,9 @@
         <button id="next-page" class="nav-button" aria-label="Next page">❯</button>
       </div>
     </div>
-
-    <div id="pdf-fallback">
-      <p class="notice-line">If you cannot review</p>
-      <div class="download-line">
-        <span class="download-arrow">⬇</span> 
-        please click download 
-        <span class="download-arrow">⬇</span>
-      </div>
-      <a href="pdfs/A Concerto of Two Grandfathers.pdf" target="_blank">
-        A Concerto of Two Grandfathers
-      </a>
-    </div>
   </div>
 
-  <audio id="celebration-sound" src="images/celebration.mp3" preload="auto"></audio>
+  <audio id="celebration-sound" src="images/open.mp3" preload="auto"></audio>
 
   <script>
     const giftBox = document.getElementById('gift-box');
@@ -293,7 +216,6 @@
     const openButton = document.getElementById('openButton');
     const message = document.getElementById('message');
     const pdfContainer = document.getElementById('pdf-container');
-    const pdfFallback = document.getElementById('pdf-fallback');
     const sound = document.getElementById('celebration-sound');
 
     const canvas = document.getElementById('pdf-canvas');
@@ -391,7 +313,6 @@
         giftBox.style.display = 'none';
         message.classList.add('show');
         pdfContainer.classList.add('show');
-        pdfFallback.classList.add('show');
         try {
           sound.play().catch(() => {});
           confetti({ particleCount: 150, spread: 120, origin: { y: 0.6 } });
@@ -407,15 +328,10 @@
         pdfDoc = pdf;
         pageCountSpan.textContent = pdf.numPages;
         renderPage(pageNum);
-        
-        // Touch gesture initialization has been removed to allow normal mobile zooming
       }).catch(err => {
         console.error('PDF loading error:', err);
-        pdfFallback.style.display = 'block';
       });
     }
-
-    // Function initTouchGestures has been completely removed
 
     openButton.addEventListener('click', e => {
       e.stopPropagation();
